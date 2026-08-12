@@ -1,0 +1,131 @@
+{
+  "name": "ideal-guacamole",
+  "version": "0.0.0-development",
+  "description": "Opinión-agnostic framework for building agentic development pipelines on top of GitHub (issues, labels, PRs) with contract-first testing, docs, and traceability. / Framework agnóstico para construir pipelines de desarrollo basados en agentes sobre GitHub.",
+  "type": "module",
+  "bin": {
+    "ideal-guacamole": "dist/cli/main.js",
+    "ig": "dist/cli/main.js"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./config": {
+      "types": "./dist/config/loader.d.ts",
+      "import": "./dist/config/loader.js"
+    },
+    "./orchestrator": {
+      "types": "./dist/orchestrator/index.d.ts",
+      "import": "./dist/orchestrator/index.js"
+    },
+    "./github": {
+      "types": "./dist/github/index.d.ts",
+      "import": "./dist/github/index.js"
+    },
+    "./qa": {
+      "types": "./dist/qa/index.d.ts",
+      "import": "./dist/qa/index.js"
+    },
+    "./reports": {
+      "types": "./dist/reports/index.d.ts",
+      "import": "./dist/reports/index.js"
+    },
+    "./traceability": {
+      "types": "./dist/traceability/index.d.ts",
+      "import": "./dist/traceability/index.js"
+    },
+    "./design-system": {
+      "types": "./dist/design-system/index.d.ts",
+      "import": "./dist/design-system/index.js"
+    }
+  },
+  "files": [
+    "dist",
+    "templates",
+    "README.md",
+    "AGENTS.md"
+  ],
+  "engines": {
+    "node": ">=20.11.0"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "clean": "rm -rf dist coverage test-results playwright-report",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "semantic-release": "semantic-release",
+    "semantic-release:dry": "semantic-release --dry-run --no-ci --branches main"
+  },
+  "keywords": [
+    "agents",
+    "agentic-pipeline",
+    "github",
+    "playwright",
+    "testing",
+    "ci-cd",
+    "traceability",
+    "framework",
+    "llm-agents"
+  ],
+  "license": "MIT",
+  "author": "Diego Naranjo Meza <diegoalonsonm@gmail.com>",
+  "homepage": "https://github.com/diegonaranjomeza/ideal-guacamole#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/diegonaranjomeza/ideal-guacamole.git"
+  },
+  "bugs": {
+    "url": "https://github.com/diegonaranjomeza/ideal-guacamole/issues"
+  },
+  "publishConfig": {
+    "access": "public",
+    "provenance": false
+  },
+  "release": {
+    "branches": [
+      "main"
+    ]
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^21.2.1",
+    "@commitlint/config-conventional": "^21.2.0",
+    "@eslint/js": "^10.0.1",
+    "@semantic-release/changelog": "^6.0.3",
+    "@semantic-release/commit-analyzer": "^13.0.1",
+    "@semantic-release/git": "^10.0.1",
+    "@semantic-release/github": "^12.0.9",
+    "@semantic-release/npm": "^13.1.5",
+    "@semantic-release/release-notes-generator": "^14.1.1",
+    "@types/node": "^26.2.0",
+    "@vitest/coverage-v8": "^4.1.10",
+    "commitlint": "^21.2.1",
+    "conventional-changelog-conventionalcommits": "^10.3.0",
+    "eslint": "^10.8.1",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-n": "^18.3.0",
+    "eslint-plugin-unicorn": "^73.0.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^17.3.0",
+    "prettier": "^3.9.6",
+    "typescript": "^6.0.3",
+    "typescript-eslint": "^8.67.0",
+    "vitest": "^4.1.10"
+  },
+  "dependencies": {
+    "@octokit/graphql": "^9.0.4",
+    "@octokit/rest": "^22.0.1",
+    "@playwright/test": "^1.62.1",
+    "commander": "^15.0.0",
+    "js-yaml": "^5.2.3",
+    "simple-git": "^3.36.0",
+    "zod": "^4.4.3"
+  }
+}

@@ -1,0 +1,12 @@
+node_modules/
+dist/
+build/
+coverage/
+test-results/
+playwright-report/
+*.tsbuildinfo
+package-lock.json
+pnpm-lock.yaml
+yarn.lock
+.storybook-out/
+.released-packages/

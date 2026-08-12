@@ -1,0 +1,66 @@
+{
+  "branches": [{ "name": "main", "prerelease": false }],
+  "ci": true,
+  "dryRun": false,
+  "tagFormat": "v${version}",
+  "plugins": [
+    [
+      "@semantic-release/commit-analyzer",
+      {
+        "preset": "conventionalcommits",
+        "releaseRules": [
+          { "type": "feat", "release": "minor" },
+          { "type": "fix", "release": "patch" },
+          { "type": "perf", "release": "patch" },
+          { "type": "docs", "release": false },
+          { "scope": "no-release", "release": false },
+          { "type": "build", "release": false },
+          { "type": "ci", "release": false }
+        ]
+      }
+    ],
+    [
+      "@semantic-release/release-notes-generator",
+      {
+        "preset": "conventionalcommits",
+        "writerOpts": {
+          "headerPartial": "## {{version}}",
+          "owner": "diegonaranjomeza",
+          "repository": "ideal-guacamole"
+        }
+      }
+    ],
+    [
+      "@semantic-release/changelog",
+      {
+        "changelogFile": "CHANGELOG.md",
+        "changelogTitle": "# Changelog\n\nAll notable changes to this project will be documented in this file.\nSee [Conventional Commits](https://conventionalcommits.org) for commit guidelines.\n"
+      }
+    ],
+    [
+      "@semantic-release/npm",
+      {
+        "npmPublish": true,
+        "tarballDir": "dist-packages",
+        "pkgRoot": "."
+      }
+    ],
+    [
+      "@semantic-release/github",
+      {
+        "assets": ["CHANGELOG.md"],
+        "successComment": false,
+        "failComment": false,
+        "failTitle": "The automated release failed",
+        "labels": ["semantic-release"]
+      }
+    ],
+    [
+      "@semantic-release/git",
+      {
+        "assets": ["CHANGELOG.md", "package.json"],
+        "message": "chore(release): ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}"
+      }
+    ]
+  ]
+}
