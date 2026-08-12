@@ -21,17 +21,17 @@
 - [x] `tests/framework.spec.ts` mínimo.
 - [x] `.gitignore` + `LICENSE` (MIT).
 
-## Fase 1 — CLI `init` mínimo
+## Fase 1 — CLI `init` mínimo ✅
 
 **DoD**: en sandbox, `ideal-guacamole init` genera el scaffold esperado; con `--github-token` crea las labels en un repo de prueba.
 
-- [ ] `src/config/schema.ts` (Zod): name, stack, deployTarget, thresholds (passCritical, passTotal, maxIter), paths.
-- [ ] `src/cli/init.ts`: copia `templates/*` no destructivamente (`--force`, `--dry-run`).
-- [ ] `templates/project.config.example.yaml` + `templates/AGENTS.md.template`.
-- [ ] `templates/.opencode/agents/*.md` (9 esqueletos: rol / trigger / entrada / salida / DoD / handoff).
-- [ ] `templates/.github/labels.yaml` (célula + estado + prioridad + fase + meta).
-- [ ] `src/github/labels.ts` + Octokit (crear labels).
-- [ ] Conectar `init` y `main.ts`.
+- [x] `src/config/schema.ts` (Zod): name, stack, deployTarget, thresholds (passCritical, passTotal, maxIter), paths.
+- [x] `src/cli/init.ts`: copia `templates/*` no destructivamente (`--force`, `--dry-run`).
+- [x] `templates/project.config.example.yaml` + `templates/AGENTS.md.template`.
+- [x] `templates/.opencode/agents/*.md` (9 esqueletos: rol / trigger / entrada / salida / DoD / handoff).
+- [x] `templates/.github/labels.yaml` (célula + estado + prioridad + fase + meta).
+- [x] `src/github/labels.ts` + Octokit (crear labels).
+- [x] Conectar `init` y `main.ts`.
 
 ## Fase 2 — Product agent + Issue templates
 
