@@ -8,3 +8,24 @@ export {
   type CreateLabelsOptions,
   type CreateLabelsResult,
 } from './labels.js';
+
+export {
+  renderIssueBody,
+  buildIssueLabels,
+  createIssue,
+  createIssueWithDependencies,
+  linkBlockedBy,
+  addLabels,
+  removeLabel,
+  transitionIssueState,
+  fetchIssue,
+  renderDependencyGraph,
+  type IssueCategory,
+  type IssuePriority,
+  type IssuePhase,
+  type IssueBody,
+  type CreateIssueInput,
+  type CreateIssueResult,
+  type GitHubIssue,
+  type DependencyGraph,
+} from './issues.js';

@@ -33,15 +33,15 @@
 - [x] `src/github/labels.ts` + Octokit (crear labels).
 - [x] Conectar `init` y `main.ts`.
 
-## Fase 2 — Product agent + Issue templates
+## Fase 2 — Product agent + Issue templates ✅
 
 **DoD**: agente Product genera issues con dependencias + grafo (`deps.md`).
 
-- [ ] `templates/.github/issue-templates/{development,testing,bug,documentation}.md` bilingües.
-- [ ] `src/github/issues.ts`: crear issue + linkear `blocked by #X` + `phase:N` + `priority:P0..P3`.
-- [ ] `src/orchestrator/dispatcher.ts` esqueleto (event dispatcher manual/CI).
-- [ ] `src/orchestrator/state-machine.ts`: estados del pipeline.
-- [ ] Prompt `.opencode/agents/product.md` completo.
+- [x] `templates/.github/issue-templates/{development,testing,bug,documentation}.md` bilingues.
+- [x] `src/github/issues.ts`: crear issue + linkear `blocked by #X` + `phase:N` + `priority:P0..P3`.
+- [x] `src/orchestrator/dispatcher.ts` esqueleto (event dispatcher manual/CI).
+- [x] `src/orchestrator/state-machine.ts`: estados del pipeline.
+- [x] Prompt `.opencode/agents/product.md` completo.
 
 ## Fase 3 — QA-Spec (contract-first)
 
