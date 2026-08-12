@@ -1,16 +1,15 @@
 #!/usr/bin/env node
 /**
  * `ideal-guacamole` CLI entrypoint (bin: `ideal-guacamole` and `ig`).
- *
- * Phase 0: emits framework metadata + a friendly banner so the binary is
- * invokable and `npx ideal-guacamole --version` resolves. Subcommands `init`
- * and `upgrade` will be wired in Phase 1 and Phase 7 respectively.
  */
 import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 
+import { Command } from 'commander';
+
 import { getFrameworkInfo } from '../index.js';
+import { runInit } from './init.js';
 
 function readPackageVersion(): string {
   const here = path.dirname(fileURLToPath(import.meta.url));
@@ -23,64 +22,99 @@ function readPackageVersion(): string {
   }
 }
 
-const HELP_TEXT = `ideal-guacamole — Agentic development pipeline framework
+async function action(): Promise<void> {
+  const program = new Command();
 
-USAGE
-  ideal-guacamole <command> [options]
-  ig <command> [options]
+  program
+    .name('ideal-guacamole')
+    .description('Agentic development pipeline framework')
+    .version(readPackageVersion());
 
-COMMANDS
-  init        Scaffold a project with templates and labels (Phase 1)
-  upgrade     Non-destructive upgrade of installed templates (Phase 7)
-  info        Print framework metadata
-  help        Print this help
+  program
+    .command('info')
+    .description('Print framework metadata')
+    .action(() => {
+      const info = getFrameworkInfo();
+      process.stdout.write(`name:    ${info.name}\n`);
+      process.stdout.write(`version: ${readPackageVersion()}\n`);
+      process.stdout.write(`phase:   1 (init CLI)\n`);
+    });
 
-OPTIONS
-  --version   Print framework version
-  --help      Alias for \`help\`
-`;
+  program
+    .command('init')
+    .description('Scaffold a project with templates and labels')
+    .option('--cwd <path>', 'Target directory', process.cwd())
+    .option('--force', 'Overwrite existing files', false)
+    .option('--dry-run', 'Preview without writing', false)
+    .option('--name <name>', 'Project name (defaults to package.json name)')
+    .option('--github-token <token>', 'GitHub token to create labels')
+    .option('--owner <owner>', 'GitHub repo owner (requires --github-token)')
+    .option('--repo <repo>', 'GitHub repo name (requires --github-token)')
+    .action(async (opts: Record<string, string | boolean | undefined>) => {
+      const result = await runInit({
+        cwd: typeof opts.cwd === 'string' ? opts.cwd : process.cwd(),
+        force: opts.force === true,
+        dryRun: opts.dryRun === true,
+        name: typeof opts.name === 'string' ? opts.name : undefined,
+        githubToken: typeof opts.githubToken === 'string' ? opts.githubToken : undefined,
+        owner: typeof opts.owner === 'string' ? opts.owner : undefined,
+        repo: typeof opts.repo === 'string' ? opts.repo : undefined,
+      });
 
-const KNOWN_NOOP_COMMANDS = new Set(['init', 'upgrade']);
+      if (result.created.length > 0) {
+        process.stdout.write(`\nCreated (${String(result.created.length)}):\n`);
+        for (const f of result.created) {
+          process.stdout.write(`  + ${f}\n`);
+        }
+      }
 
-const HELP_COMMANDS = new Set([undefined, 'help', '--help', '-h']);
+      if (result.overwritten.length > 0) {
+        process.stdout.write(`\nOverwritten (${String(result.overwritten.length)}):\n`);
+        for (const f of result.overwritten) {
+          process.stdout.write(`  ~ ${f}\n`);
+        }
+      }
 
-function main(): number {
-  const argv = process.argv.slice(2);
-  const command = argv[0];
+      if (result.skipped.length > 0) {
+        process.stdout.write(`\nSkipped (${String(result.skipped.length)}):\n`);
+        for (const f of result.skipped) {
+          process.stdout.write(`  = ${f}\n`);
+        }
+      }
 
-  if (HELP_COMMANDS.has(command)) {
-    process.stdout.write(HELP_TEXT);
-    return 0;
-  }
+      if (result.labelsResult) {
+        const lr = result.labelsResult;
+        process.stdout.write(`\nLabels:\n`);
+        process.stdout.write(`  created: ${String(lr.created.length)}\n`);
+        process.stdout.write(`  updated: ${String(lr.updated.length)}\n`);
+        process.stdout.write(`  skipped: ${String(lr.skipped.length)}\n`);
+        if (lr.errors.length > 0) {
+          process.stdout.write(`  errors:\n`);
+          for (const [name, msg] of lr.errors) {
+            process.stdout.write(`    ${name}: ${msg}\n`);
+          }
+        }
+      }
 
-  if (command === '--version' || command === '-v') {
-    process.stdout.write(`${readPackageVersion()}\n`);
-    return 0;
-  }
+      process.stdout.write('\nDone.\n');
+    });
 
-  if (command === 'info') {
-    const info = getFrameworkInfo();
-    process.stdout.write(`name:    ${info.name}\n`);
-    process.stdout.write(`version: ${readPackageVersion()}\n`);
-    process.stdout.write(`phase:   0 (scaffolding)\n`);
-    return 0;
-  }
+  program
+    .command('upgrade')
+    .description('Non-destructive upgrade of installed templates (Phase 7)')
+    .action(() => {
+      process.stderr.write("ideal-guacamole: 'upgrade' is not implemented yet (Phase 7).\n");
+      process.exit(2);
+    });
 
-  if (command !== undefined && KNOWN_NOOP_COMMANDS.has(command)) {
-    const cmd = command as 'init' | 'upgrade';
-    const phase = cmd === 'init' ? 'Phase 1' : 'Phase 7';
+  try {
+    await program.parseAsync();
+  } catch (error: unknown) {
     process.stderr.write(
-      `ideal-guacamole: '${cmd}' is not implemented yet (${phase}).\n` +
-        `Run 'ideal-guacamole help' to see available commands.\n`,
+      `ideal-guacamole: ${error instanceof Error ? error.message : String(error)}\n`,
     );
-    return 2;
+    process.exit(1);
   }
-
-  const unknown = command ?? 'unknown';
-  process.stderr.write(`ideal-guacamole: unknown command '${unknown}'.\n`);
-  process.stderr.write(`Run 'ideal-guacamole help' for usage.\n`);
-  return 2;
 }
 
-const exitCode = main();
-process.exit(exitCode);
+void action();

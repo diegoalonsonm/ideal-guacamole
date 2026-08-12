@@ -1,0 +1,121 @@
+# GitHub labels for ideal-guacamole projects
+# / Labels de GitHub para proyectos con ideal-guacamole
+#
+# Taxonomy: 5 groups — célula (category), estado (pipeline status),
+# prioridad (priority), fase (development phase), meta (meta tags).
+# Use `ideal-guacamole init --github-token <token>` to create these automatically.
+
+# ──────────────────────────────────────────────
+# Célula — what kind of issue is this?
+# ──────────────────────────────────────────────
+- name: development
+  color: 0E8A16
+  description: Development task — feature, refactor, pipeline, config.
+
+- name: testing
+  color: 1D76DB
+  description: Test case — unit, integration, or E2E spec to be written or run.
+
+- name: bug
+  color: D73A4A
+  description: Something is not working as expected — needs investigation and fix.
+
+- name: documentation
+  color: 0075CA
+  description: Documentation work — code docs, module docs, arch-changes, root-cause.
+
+# ──────────────────────────────────────────────
+# Estado — where in the pipeline is this issue?
+# ──────────────────────────────────────────────
+- name: dev-ready
+  color: FBCA04
+  description: Issue is fully specified (with test specs) and ready for a developer.
+
+- name: in-dev
+  color: FBCA04
+  description: A developer is actively working on this issue.
+
+- name: dev-done
+  color: FBCA04
+  description: Development complete; PR to dev opened or merged.
+
+- name: testing
+  color: FBCA04
+  description: Issue's PR is in the testing branch undergoing QA-Run.
+
+- name: test-failed
+  color: D73A4A
+  description: QA-Run found failures; looping feedback back to dev.
+
+- name: review
+  color: FBCA04
+  description: PR is under code review by the Reviewer agent.
+
+- name: approved
+  color: 0E8A16
+  description: Reviewer approved; ready for Gatekeeper merge.
+
+- name: pr-main
+  color: "5319E7"
+  description: PR to main opened; awaiting human approval.
+
+# ──────────────────────────────────────────────
+# Prioridad — how urgent is this?
+# ──────────────────────────────────────────────
+- name: P0
+  color: B60205
+  description: Critical — blocks all other work; fix immediately.
+
+- name: P1
+  color: D93F0B
+  description: High — should be done in the current phase.
+
+- name: P2
+  color: FBCA04
+  description: Medium — should be done soon but not blocking.
+
+- name: P3
+  color: 0E8A16
+  description: Low — nice to have; no urgency.
+
+# ──────────────────────────────────────────────
+# Fase — which development phase?
+# ──────────────────────────────────────────────
+- name: "phase:1"
+  color: C5DEF5
+  description: Phase 1 — foundation / base scaffolding.
+
+- name: "phase:2"
+  color: C5DEF5
+  description: Phase 2 — core features.
+
+- name: "phase:3"
+  color: C5DEF5
+  description: Phase 3 — integrations and polish.
+
+- name: "phase:4"
+  color: C5DEF5
+  description: Phase 4 — hardening and release prep.
+
+# ──────────────────────────────────────────────
+# Meta — cross-cutting tags
+# ──────────────────────────────────────────────
+- name: blocked
+  color: B60205
+  description: Blocked by another issue or external dependency.
+
+- name: needs-human
+  color: "5319E7"
+  description: Requires human decision or approval (e.g. merge to main, deploy).
+
+- name: flaky-test
+  color: FBCA04
+  description: Test is flaky (2/3 passing) — investigate separately; does not block PR.
+
+- name: quarantined
+  color: D93F0B
+  description: Test suite quarantined due to >20% flakiness; excluded from gate until fixed.
+
+- name: semantic-release
+  color: C5DEF5
+  description: Managed by semantic-release; do not edit manually.
