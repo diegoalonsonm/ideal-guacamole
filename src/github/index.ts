@@ -29,3 +29,17 @@ export {
   type GitHubIssue,
   type DependencyGraph,
 } from './issues.js';
+
+export {
+  getColumnForState,
+  mapStateToColumn,
+  getProject,
+  addIssueToProject,
+  updateItemStatusField,
+  moveIssueToStateColumn,
+  COLUMN_TO_STATE,
+  ProjectsError,
+  type ProjectInfo,
+  type ProjectColumn,
+  type ProjectItem,
+} from './projects.js';

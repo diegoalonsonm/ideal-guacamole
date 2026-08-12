@@ -43,13 +43,13 @@
 - [x] `src/orchestrator/state-machine.ts`: estados del pipeline.
 - [x] Prompt `.opencode/agents/product.md` completo.
 
-## Fase 3 — QA-Spec (contract-first)
+## Fase 3 — QA-Spec (contract-first) ✅
 
 **DoD**: issue con expected behavior produce skeleton de test y se mueve a `dev-ready`.
 
-- [ ] `src/qa/spec-parser.ts`: parsea `## Expected behavior` Given/When/Then → Playwright skeleton.
-- [ ] `src/github/projects.ts`: sync estado → GitHub Projects v2.
-- [ ] Prompt `.opencode/agents/qa-spec.md` completo.
+- [x] `src/qa/spec-parser.ts`: parsea `## Expected behavior` Given/When/Then → Playwright skeleton.
+- [x] `src/github/projects.ts`: sync estado → GitHub Projects v2.
+- [x] Prompt `.opencode/agents/qa-spec.md` completo.
 
 ## Fase 4 — QA-Run + flaky policy
 
