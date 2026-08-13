@@ -119,7 +119,21 @@ paths:
 
 ### Estado del proyecto
 
-Actualmente en **Fase 0**: scaffolding del repo base. Revisa `documentacion/framework/roadmap.md` para ver las 8 fases.
+**Fases 0–8 completadas.** El framework está funcional end-to-end:
+
+| Fase | Descripción                                           | Estado |
+| ---- | ----------------------------------------------------- | ------ |
+| 0    | Scaffolding del repo base                             | ✅     |
+| 1    | CLI `init` + templates + labels                       | ✅     |
+| 2    | Product agent + state machine + dispatcher            | ✅     |
+| 3    | QA-Spec (contract-first Given/When/Then → Playwright) | ✅     |
+| 4    | QA-Run + isolation + flaky policy (3x, 2/3 rule)      | ✅     |
+| 5    | Reviewer + Gatekeeper + PR/release reports            | ✅     |
+| 6    | Docs + design-system token gen + traceability         | ✅     |
+| 7    | CLI `upgrade` (conflict-marker merge)                 | ✅     |
+| 8    | Dogfooding + lessons                                  | ✅     |
+
+Revisa `documentacion/framework/roadmap.md` y `documentacion/framework/lessons.md`.
 
 ---
 
@@ -146,7 +160,7 @@ npx ideal-guacamole upgrade
 
 ### Status
 
-Phase 0 (repo scaffolding). See `documentacion/framework/roadmap.md` for the 8-phase roadmap.
+Phases 0–8 complete. See `documentacion/framework/roadmap.md` and `documentacion/framework/lessons.md`.
 
 ---
 

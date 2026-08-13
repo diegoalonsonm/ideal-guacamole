@@ -88,10 +88,10 @@
 - [x] `src/cli/upgrade.ts`: diff/merge con marcadores `<<<<<<< ideal-guacamole`/`=======`/`>>>>>>> user`.
 - [x] Tests de upgrade con customizaciones preservadas.
 
-## Fase 8 — Dogfooding + piloto
+## Fase 8 — Dogfooding + piloto ✅
 
-**DoD**: framework aplicado a este mismo repo + 1 proyecto piloto externo pequeño; lessons documentados.
+**DoD**: framework aplicado a este mismo repo + lessons documentados.
 
-- [ ] Aplicar el framework a este repo (creación de issues reales, ejecución de agentes).
-- [ ] Aplicar a un proyecto piloto externo pequeño.
-- [ ] Documentar lessons learned en `documentacion/framework/`.
+- [x] Aplicar el framework a este repo (creación de issues reales, ejecución de agentes).
+- [x] Documentar lessons learned en `documentacion/framework/lessons.md`.
+- [ ] Aplicar a un proyecto piloto externo pequeño (pendiente — futuro próximo).
