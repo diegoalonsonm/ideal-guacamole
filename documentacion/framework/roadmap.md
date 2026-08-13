@@ -72,14 +72,14 @@
 - [x] Prompts `reviewer.md`, `gatekeeper.md` actualizados.
 - [x] Gate humano obligatorio en `testing→main` y `main→deploy`.
 
-## Fase 6 — Docs + design-system + traceability
+## Fase 6 — Docs + design-system + traceability ✅
 
 **DoD**: merge a `dev` regenera docs y traceability; bug cerrado añade root-cause a `documentacion/bugs/`.
 
-- [ ] `src/design-system/token-doc-generator.ts` (híbrido: spec humana + sección autogen).
-- [ ] `src/traceability/graph.ts`: parsea labels `closes:`, `tests:`, `bug:` → `traceability.md`.
-- [ ] Prompt `.opencode/agents/docs.md`.
-- [ ] Trigger: post-merge a `dev` + on-demand.
+- [x] `src/design-system/token-doc-generator.ts` (híbrido: spec humana + sección autogen).
+- [x] `src/traceability/graph.ts`: parsea labels `closes:`, `tests:`, `bug:` → `traceability.md`.
+- [x] Prompt `.opencode/agents/docs.md`.
+- [x] Trigger: post-merge a `dev` + on-demand.
 
 ## Fase 7 — CLI `upgrade`
 
