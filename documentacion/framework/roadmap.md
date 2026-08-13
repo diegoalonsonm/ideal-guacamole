@@ -61,16 +61,16 @@
 - [x] `templates/.github/workflows/e2e-testing.yml` dispara QA-Run en PR→testing.
 - [x] Prompt `.opencode/agents/qa-run.md` completo.
 
-## Fase 5 — Reviewer + Gatekeeper + reports
+## Fase 5 — Reviewer + Gatekeeper + reports ✅
 
 **DoD**: loop end-to-end `dev → testing → main` con gates humanos.
 
-- [ ] `src/reports/pr-report.ts` (markdown con issues cerrados, estado tests, riesgos).
-- [ ] `src/reports/release-report.ts` (changelog + migraciones + flags + rollback plan).
-- [ ] `src/github/pr.ts`: leer diff, commentar, aprobar.
-- [ ] `templates/.github/workflows/ci-dev.yml`, `deploy-main.yml`.
-- [ ] Prompts `reviewer.md`, `gatekeeper.md`, `deploy.md`.
-- [ ] Gate humano obligatorio en `testing→main` y `main→deploy`.
+- [x] `src/reports/pr-report.ts` (markdown con issues cerrados, estado tests, riesgos).
+- [x] `src/reports/release-report.ts` (changelog + migraciones + flags + rollback plan).
+- [x] `src/github/pr.ts`: leer diff, commentar, aprobar.
+- [x] `templates/.github/workflows/ci-dev.yml`, `deploy-main.yml`.
+- [x] Prompts `reviewer.md`, `gatekeeper.md` actualizados.
+- [x] Gate humano obligatorio en `testing→main` y `main→deploy`.
 
 ## Fase 6 — Docs + design-system + traceability
 

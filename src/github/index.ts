@@ -43,3 +43,15 @@ export {
   type ProjectColumn,
   type ProjectItem,
 } from './projects.js';
+
+export {
+  fetchPR,
+  fetchPRDiff,
+  commentOnPR,
+  mergePR,
+  approvePR,
+  requestChanges,
+  parseLinkedIssues,
+  type PRDiff,
+  type PRInfo,
+} from './pr.js';

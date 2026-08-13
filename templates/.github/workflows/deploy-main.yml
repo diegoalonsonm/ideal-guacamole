@@ -1,0 +1,79 @@
+name: Deploy (main)
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+
+jobs:
+  semantic-release:
+    name: Semantic Release
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Semantic Release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: npx semantic-release
+
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+    needs: semantic-release
+    if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
+    environment:
+      name: production
+      url: ${{ steps.deploy.outputs.url }}
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build
+        run: npm run build
+
+      - name: Deploy
+        id: deploy
+        run: |
+          echo "Deploy step — customize for your project (vercel, fly, aws, etc.)"
+          echo "url=https://example.com" >> $GITHUB_OUTPUT
+
+      - name: Smoke test
+        run: |
+          echo "Smoke test step — health check, critical path, auth, DB connectivity"
+
+      - name: Create release tag
+        if: github.event_name == 'push'
+        run: |
+          echo "Tag created by semantic-release"
