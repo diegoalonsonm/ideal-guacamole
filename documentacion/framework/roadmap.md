@@ -51,15 +51,15 @@
 - [x] `src/github/projects.ts`: sync estado → GitHub Projects v2.
 - [x] Prompt `.opencode/agents/qa-spec.md` completo.
 
-## Fase 4 — QA-Run + flaky policy
+## Fase 4 — QA-Run + flaky policy ✅
 
 **DoD**: PR a `testing` dispara QA-Run, reporta con política flaky, comenta en PR.
 
-- [ ] `src/qa/runner.ts`: invoca Playwright (MCP o `@playwright/test`), parsea resultados.
-- [ ] `src/qa/isolation.ts`: reset DB, browser context fresco, mocks determinísticos.
-- [ ] `src/qa/flaky-policy.ts`: 3 reintentos, 2/3 = flaky + label `flaky-test`, no bloquea. Umbral 20% → `quarantined`.
-- [ ] `templates/.github/workflows/e2e-testing.yml` dispara QA-Run en PR→testing.
-- [ ] Prompt `.opencode/agents/qa-run.md` completo.
+- [x] `src/qa/runner.ts`: invoca Playwright (MCP o `@playwright/test`), parsea resultados.
+- [x] `src/qa/isolation.ts`: reset DB, browser context fresco, mocks determinísticos.
+- [x] `src/qa/flaky-policy.ts`: 3 reintentos, 2/3 = flaky + label `flaky-test`, no bloquea. Umbral 20% → `quarantined`.
+- [x] `templates/.github/workflows/e2e-testing.yml` dispara QA-Run en PR→testing.
+- [x] Prompt `.opencode/agents/qa-run.md` completo.
 
 ## Fase 5 — Reviewer + Gatekeeper + reports
 
