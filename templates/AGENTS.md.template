@@ -107,7 +107,33 @@ See `.github/labels.yaml` for the full label taxonomy:
 - **Fase**: `phase:1`–`phase:4`
 - **Meta**: `blocked`, `needs-human`, `flaky-test`, `quarantined`
 
-## 10. When in doubt / En duda
+## 10. GitHub integration / Integración con GitHub
+
+The framework uses a **hybrid** approach for GitHub API access:
+
+- **Octokit** (REST + GraphQL) — core library for `issues`, `labels`, `PRs` (type-safe, testable).
+- **GitHub CLI (`gh`)** — fallback for authentication and **Projects v2** (more stable than raw GraphQL).
+
+### Authentication
+
+`createOctokit()` (`src/github/client.ts`) resolves the token in this order:
+
+1. `--github-token` CLI flag (if provided)
+2. `GITHUB_TOKEN` environment variable
+3. `GH_TOKEN` environment variable
+4. `gh auth token` (if `gh` is installed and authenticated)
+
+If none of these work, it throws `GitHubAuthError` with clear instructions.
+
+### Projects v2
+
+Uses `gh project item-add` / `gh project item-edit` shell commands. Requires `gh` CLI installed (preinstalled on GitHub-hosted runners).
+
+### CI workflows
+
+Workflows use `actions/github-script@v7` (Octokit inline) for PR comments. The CLI subcommands `qa-run` and `review` use `createOctokit()` internally.
+
+## 11. When in doubt / En duda
 
 - Decide a favor de **reproducibilidad** y **auditabilidad**.
 - Nunca ejecutar acciones irreversibles (deploy, merge a `main`) de forma autónoma.

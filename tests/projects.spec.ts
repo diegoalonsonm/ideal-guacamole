@@ -4,6 +4,8 @@ import {
   getColumnForState,
   mapStateToColumn,
   COLUMN_TO_STATE,
+  buildGhProjectAddCommand,
+  parseGhProjectOutput,
   ProjectsError,
 } from '../src/github/index.js';
 
@@ -45,5 +47,34 @@ describe('mapStateToColumn', () => {
 
   it('throws ProjectsError for unknown state', () => {
     expect(() => mapStateToColumn('invalid')).toThrow(ProjectsError);
+  });
+});
+
+describe('buildGhProjectAddCommand', () => {
+  it('builds a gh project item-add command', () => {
+    const cmd = buildGhProjectAddCommand({
+      owner: 'diegonaranjomeza',
+      projectNumber: 1,
+      issueNumber: 42,
+      repo: 'ideal-guacamole',
+    });
+    expect(cmd).toBe(
+      'gh project item-add 1 --owner diegonaranjomeza --url https://github.com/diegonaranjomeza/ideal-guacamole/issues/42',
+    );
+  });
+});
+
+describe('parseGhProjectOutput', () => {
+  it('parses JSON with id field', () => {
+    const result = parseGhProjectOutput('{"id": "PVTI_xyz"}');
+    expect(result?.itemId).toBe('PVTI_xyz');
+  });
+
+  it('returns undefined for non-JSON output', () => {
+    expect(parseGhProjectOutput('Error: not found')).toBeUndefined();
+  });
+
+  it('returns undefined for JSON without id', () => {
+    expect(parseGhProjectOutput('{"foo": "bar"}')).toBeUndefined();
   });
 });

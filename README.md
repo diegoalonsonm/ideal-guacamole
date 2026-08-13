@@ -117,6 +117,28 @@ paths:
 | Docs         | merge a `dev` / on-demand | docs regeneradas + traceability                                |
 | Deploy       | merge a `main`            | deployment + smoke (humano aprueba)                            |
 
+### GitHub integration
+
+El framework usa un enfoque **híbrido** para GitHub:
+
+- **Octokit** (REST + GraphQL) — core para `issues`, `labels`, `PRs` (type-safe, testable).
+- **GitHub CLI (`gh`)** — fallback de autenticación y **Projects v2** (más estable que GraphQL crudo).
+
+#### Autenticación
+
+`createOctokit()` resuelve el token en este orden:
+
+1. `--github-token` CLI flag (si se pasa)
+2. `GITHUB_TOKEN` env var
+3. `GH_TOKEN` env var
+4. `gh auth token` (si `gh` está instalado y autenticado)
+
+Si ninguno funciona, lanza `GitHubAuthError` con instrucciones claras.
+
+#### Projects v2
+
+Usa `gh project item-add` / `gh project item-edit` en lugar de GraphQL crudo. Requiere `gh` CLI instalado (preinstalado en GitHub-hosted runners).
+
 ### Estado del proyecto
 
 **Fases 0–8 completadas.** El framework está funcional end-to-end:

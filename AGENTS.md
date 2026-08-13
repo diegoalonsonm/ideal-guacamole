@@ -125,13 +125,40 @@ Un cambio está listo para merge cuando:
 ## 9. Where to find what / Dónde encontrar cada cosa
 
 - Roadmap de fases: `documentacion/framework/roadmap.md`
+- Lessons learned: `documentacion/framework/lessons.md`
 - Spec del framework: `documentacion/framework/spec.md`
 - Design-system (vacío en Fase 0): `documentacion/design-system/design-system.doc.md`
 - Templates para `ig init`: `templates/`
 - Prompts de agentes: `.opencode/agents/*.md` (generados en Fase 1)
 - Labels del repo: `.github/labels.yaml` (generado en Fase 1)
 
-## 10. When in doubt / En duda
+## 10. GitHub integration / Integración con GitHub
+
+The framework uses a **hybrid** approach for GitHub API access:
+
+- **Octokit** (REST + GraphQL) — core library for `issues`, `labels`, `PRs` (type-safe, testable).
+- **GitHub CLI (`gh`)** — fallback for authentication and **Projects v2** (more stable than raw GraphQL).
+
+### Authentication
+
+`createOctokit()` (`src/github/client.ts`) resolves the token in this order:
+
+1. `--github-token` CLI flag (if provided)
+2. `GITHUB_TOKEN` environment variable
+3. `GH_TOKEN` environment variable
+4. `gh auth token` (if `gh` is installed and authenticated)
+
+If none of these work, it throws `GitHubAuthError` with clear instructions.
+
+### Projects v2
+
+Uses `gh project item-add` / `gh project item-edit` shell commands instead of raw GraphQL mutations. This is more stable and less verbose. Requires `gh` CLI installed (preinstalled on GitHub-hosted runners).
+
+### CI workflows
+
+Workflows use `actions/github-script@v7` (Octokit inline) for PR comments and `${{ secrets.GITHUB_TOKEN }}` for authentication. The CLI subcommands `qa-run` and `review` use `createOctokit()` internally.
+
+## 11. When in doubt / En duda
 
 - Ante un edge case no cubierto en este archivo, decide a favor de **reproducibilidad** (que el pipeline pueda re-corre el mismo paso y llegar al mismo resultado) y **auditabilidad** (que cualquier decision quede trazada en un issue/label/PR).
 - Nunca ejecutar acciones irreversibles (deploy, merge a `main`, borrado de issues) de forma autónoma.

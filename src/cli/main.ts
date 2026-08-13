@@ -11,6 +11,8 @@ import { Command } from 'commander';
 import { getFrameworkInfo } from '../index.js';
 import { runInit } from './init.js';
 import { runUpgrade } from './upgrade.js';
+import { runQaRunCommand } from './qa-run-cmd.js';
+import { runReviewCommand } from './review-cmd.js';
 
 function readPackageVersion(): string {
   const here = path.dirname(fileURLToPath(import.meta.url));
@@ -144,6 +146,54 @@ async function action(): Promise<void> {
       }
 
       process.stdout.write('\nDone.\n');
+    });
+
+  program
+    .command('qa-run')
+    .description('Run E2E tests on a PR and post a report comment')
+    .requiredOption('--pr-number <n>', 'PR number', Number)
+    .option('--owner <owner>', 'GitHub repo owner')
+    .option('--repo <repo>', 'GitHub repo name')
+    .option('--test-dir <path>', 'Test directory', './tests/e2e')
+    .option('--output-dir <path>', 'Output directory', '.qa-output')
+    .option('--dry-run', 'Preview without running tests or posting comments')
+    .action(async (opts: Record<string, string | boolean | number | undefined>) => {
+      const { commentId, report, verdict } = await runQaRunCommand({
+        prNumber: typeof opts.prNumber === 'number' ? opts.prNumber : Number(opts.prNumber),
+        owner: typeof opts.owner === 'string' ? opts.owner : undefined,
+        repo: typeof opts.repo === 'string' ? opts.repo : undefined,
+        testDir: typeof opts.testDir === 'string' ? opts.testDir : './tests/e2e',
+        outputDir: typeof opts.outputDir === 'string' ? opts.outputDir : '.qa-output',
+        dryRun: opts.dryRun === true,
+      });
+
+      process.stdout.write(`\nQA-Run verdict: ${verdict}\n`);
+      if (commentId !== undefined) {
+        process.stdout.write(`PR comment posted (id: ${String(commentId)}).\n`);
+      }
+      process.stdout.write(`\n${report}\n`);
+    });
+
+  program
+    .command('review')
+    .description('Review a PR and post a checklist comment')
+    .requiredOption('--pr-number <n>', 'PR number', Number)
+    .option('--owner <owner>', 'GitHub repo owner')
+    .option('--repo <repo>', 'GitHub repo name')
+    .option('--dry-run', 'Preview without posting comment')
+    .action(async (opts: Record<string, string | boolean | number | undefined>) => {
+      const { commentId, report, verdict } = await runReviewCommand({
+        prNumber: typeof opts.prNumber === 'number' ? opts.prNumber : Number(opts.prNumber),
+        owner: typeof opts.owner === 'string' ? opts.owner : undefined,
+        repo: typeof opts.repo === 'string' ? opts.repo : undefined,
+        dryRun: opts.dryRun === true,
+      });
+
+      process.stdout.write(`\nReview verdict: ${verdict}\n`);
+      if (commentId !== undefined) {
+        process.stdout.write(`PR comment posted (id: ${String(commentId)}).\n`);
+      }
+      process.stdout.write(`\n${report}\n`);
     });
 
   try {

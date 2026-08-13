@@ -3,7 +3,8 @@ import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 import { load as yamlLoad } from 'js-yaml';
-import { Octokit } from '@octokit/rest';
+
+import { createOctokit } from './client.js';
 
 export interface LabelDefinition {
   name: string;
@@ -67,7 +68,7 @@ export async function createLabelsInRepo(
     };
   }
 
-  const octokit = new Octokit({ auth: options.token });
+  const octokit = createOctokit({ token: options.token });
 
   const existing = new Map<string, LabelDefinition>();
   try {

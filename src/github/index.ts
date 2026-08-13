@@ -1,4 +1,14 @@
 export {
+  createOctokit,
+  resolveToken,
+  getGhToken,
+  isGhAvailable,
+  clearGhTokenCache,
+  GitHubAuthError,
+  type CreateOctokitOptions,
+} from './client.js';
+
+export {
   loadLabelsFile,
   loadBundledLabels,
   getBundledLabelsPath,
@@ -33,15 +43,15 @@ export {
 export {
   getColumnForState,
   mapStateToColumn,
-  getProject,
-  addIssueToProject,
-  updateItemStatusField,
   moveIssueToStateColumn,
+  buildGhProjectAddCommand,
+  buildGhProjectItemEditCommand,
+  parseGhProjectOutput,
   COLUMN_TO_STATE,
   ProjectsError,
   type ProjectInfo,
   type ProjectColumn,
-  type ProjectItem,
+  type GhProjectOptions,
 } from './projects.js';
 
 export {
