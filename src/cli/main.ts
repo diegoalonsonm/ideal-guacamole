@@ -10,6 +10,7 @@ import { Command } from 'commander';
 
 import { getFrameworkInfo } from '../index.js';
 import { runInit } from './init.js';
+import { runUpgrade } from './upgrade.js';
 
 function readPackageVersion(): string {
   const here = path.dirname(fileURLToPath(import.meta.url));
@@ -101,10 +102,48 @@ async function action(): Promise<void> {
 
   program
     .command('upgrade')
-    .description('Non-destructive upgrade of installed templates (Phase 7)')
-    .action(() => {
-      process.stderr.write("ideal-guacamole: 'upgrade' is not implemented yet (Phase 7).\n");
-      process.exit(2);
+    .description('Non-destructive upgrade of installed templates with conflict markers')
+    .option('--cwd <path>', 'Target directory', process.cwd())
+    .option('--dry-run', 'Preview without writing', false)
+    .option('--force', 'Overwrite existing files (no merge)', false)
+    .action((opts: Record<string, string | boolean | undefined>) => {
+      const result = runUpgrade({
+        cwd: typeof opts.cwd === 'string' ? opts.cwd : process.cwd(),
+        dryRun: opts.dryRun === true,
+        force: opts.force === true,
+      });
+
+      if (result.created.length > 0) {
+        process.stdout.write(`\nNew files (${String(result.created.length)}):\n`);
+        for (const f of result.created) {
+          process.stdout.write(`  + ${f}\n`);
+        }
+      }
+
+      if (result.updated.length > 0) {
+        process.stdout.write(`\nOverwritten (${String(result.updated.length)}):\n`);
+        for (const f of result.updated) {
+          process.stdout.write(`  ~ ${f}\n`);
+        }
+      }
+
+      if (result.conflict.length > 0) {
+        process.stdout.write(
+          `\nConflicts (merged with markers) (${String(result.conflict.length)}):\n`,
+        );
+        for (const f of result.conflict) {
+          process.stdout.write(`  ! ${f}\n`);
+        }
+      }
+
+      if (result.unchanged.length > 0) {
+        process.stdout.write(`\nUnchanged (${String(result.unchanged.length)}):\n`);
+        for (const f of result.unchanged) {
+          process.stdout.write(`  = ${f}\n`);
+        }
+      }
+
+      process.stdout.write('\nDone.\n');
     });
 
   try {

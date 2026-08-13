@@ -81,12 +81,12 @@
 - [x] Prompt `.opencode/agents/docs.md`.
 - [x] Trigger: post-merge a `dev` + on-demand.
 
-## Fase 7 — CLI `upgrade`
+## Fase 7 — CLI `upgrade` ✅
 
 **DoD**: `ideal-guacamole upgrade` lleva mejoras sin pisar cambios del proyecto.
 
-- [ ] `src/cli/upgrade.ts`: diff/merge con marcadores `<<<<<<< ideal-guacamole`/`=======`/`>>>>>>> user`.
-- [ ] Tests de upgrade con customizaciones preservadas.
+- [x] `src/cli/upgrade.ts`: diff/merge con marcadores `<<<<<<< ideal-guacamole`/`=======`/`>>>>>>> user`.
+- [x] Tests de upgrade con customizaciones preservadas.
 
 ## Fase 8 — Dogfooding + piloto
 
