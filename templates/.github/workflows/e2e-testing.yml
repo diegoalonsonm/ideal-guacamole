@@ -1,0 +1,131 @@
+name: E2E Testing (QA-Run)
+
+on:
+  pull_request:
+    branches:
+      - testing
+    types:
+      - opened
+      - synchronize
+      - reopened
+
+permissions:
+  contents: read
+  pull-requests: write
+  issues: write
+
+jobs:
+  qa-run:
+    name: QA-Run E2E Tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps chromium
+
+      - name: Load project config
+        id: config
+        run: |
+          if [ -f project.config.yaml ]; then
+            echo "config-found=true" >> $GITHUB_OUTPUT
+          else
+            echo "config-found=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Run database reset (if configured)
+        if: steps.config.outputs.config-found == 'true'
+        run: |
+          # TODO: Add database reset command based on project.config.yaml
+          echo "Database reset step — customize for your project"
+
+      - name: Seed database (if configured)
+        if: steps.config.outputs.config-found == 'true'
+        run: |
+          # TODO: Add seed command based on project.config.yaml
+          echo "Database seed step — customize for your project"
+
+      - name: Run QA-Run with isolation
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+        run: |
+          npx ideal-guacamole qa-run \
+            --test-dir ./tests/e2e \
+            --output-dir .qa-output \
+            --pr-number ${{ github.event.pull_request.number }}
+
+      - name: Parse test results
+        id: results
+        run: |
+          if [ -f .qa-output/report.md ]; then
+            echo "report-exists=true" >> $GITHUB_OUTPUT
+            echo "## QA-Run Report" >> $GITHUB_STEP_SUMMARY
+            cat .qa-output/report.md >> $GITHUB_STEP_SUMMARY
+          else
+            echo "report-exists=false" >> $GITHUB_OUTPUT
+            echo "⚠️ No test report generated" >> $GITHUB_STEP_SUMMARY
+          fi
+
+      - name: Comment PR with test report
+        if: steps.results.outputs.report-exists == 'true'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const report = fs.readFileSync('.qa-output/report.md', 'utf8');
+
+            const { data: comments } = await github.rest.issues.listComments({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.payload.pull_request.number,
+            });
+
+            const existing = comments.find(c =>
+              c.body.includes('## QA-Run Report')
+            );
+
+            if (existing) {
+              await github.rest.issues.updateComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                comment_id: existing.id,
+                body: report,
+              });
+            } else {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.payload.pull_request.number,
+                body: report,
+              });
+            }
+
+      - name: Add test-failed label on failure
+        if: failure()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            await github.rest.issues.addLabels({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.payload.pull_request.number,
+              labels: ['test-failed'],
+            });
+
+      - name: Cleanup
+        if: always()
+        run: |
+          rm -rf .qa-output

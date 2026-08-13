@@ -1,9 +1,9 @@
 /**
  * Public entrypoint for the `ideal-guacamole` package.
  *
- * Phase 0 ships a minimal skeleton. Subsequent phases will re-export from
- * `orchestrator`, `github`, `qa`, `reports`, `traceability`, `design-system`,
- * and `config`. Each submodule is implemented incrementally per the roadmap.
+ * Re-exports all framework modules: config, orchestrator, github, qa,
+ * reports, traceability, and design-system. Each can also be imported
+ * directly via its subpath export (e.g. `ideal-guacamole/qa`).
  */
 
 export const FRAMEWORK_NAME = 'ideal-guacamole' as const;
@@ -18,3 +18,11 @@ export interface FrameworkInfo {
 export function getFrameworkInfo(): FrameworkInfo {
   return { name: FRAMEWORK_NAME, version: FRAMEWORK_VERSION } as const;
 }
+
+export * from './config/index.js';
+export * from './orchestrator/index.js';
+export * from './github/index.js';
+export * from './qa/index.js';
+export * from './reports/index.js';
+export * from './traceability/index.js';
+export * from './design-system/index.js';

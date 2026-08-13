@@ -1,0 +1,43 @@
+# ideal-guacamole project configuration
+# / Configuración del proyecto para ideal-guacamole
+#
+# This file is consumed by the framework's orchestrator, CI workflows, and agent
+# prompts. Edit it to match your project's stack, deploy target, and quality
+# thresholds. Never put secrets here — use GitHub secrets/variables.
+
+name: my-project
+description: A short description of what this project does.
+
+stack:
+  frontend: next # e.g. next | react | vue | svelte | none
+  backend: fastapi # e.g. fastapi | express | nest | rails | none
+  database: postgres # e.g. postgres | mysql | sqlite | mongodb | none
+  infrastructure: docker # e.g. docker | k8s | serverless | none
+
+deployTarget: vercel # vercel | fly | aws | gcp | azure | custom
+
+thresholds:
+  passCritical: 1.0 # fraction of critical tests that must pass (0–1)
+  passTotal: 0.95 # fraction of all tests that must pass (0–1)
+  maxIter: 3 # max dev↔testing iterations before escalating
+  coverageLines: 0.8 # min line coverage (0–1)
+  coverageFunctions: 0.8 # min function coverage (0–1)
+
+paths:
+  frontend: ./web # relative path to frontend source
+  backend: ./api # relative path to backend source
+  tests: ./tests # relative path to test specs
+  docs: ./documentacion # relative path to documentation root
+
+agents:
+  enabled: # which agents are active (omit to enable all)
+    - orchestrator
+    - product
+    - qa-spec
+    - qa-run
+    - developer
+    - reviewer
+    - gatekeeper
+    - docs
+    - deploy
+  githubProject: 123 # GitHub Projects v2 project node id (optional)
